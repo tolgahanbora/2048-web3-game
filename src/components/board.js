@@ -2,19 +2,18 @@ import React, { useState, useEffect } from 'react';
 import Tile from './tile';
 import './board.css';
 import { Block, gameBlockchain } from './blockchain';
+import supabase from '../utils/supabase';
 
 const createBoard = () => {
     return Array(4).fill(null).map(() => Array(4).fill(0));
 };
 
-const Board = () => {
+const Board = ({ wallet }) => {
     const [board, setBoard] = useState(createBoard());
     const [gameOver, setGameOver] = useState(false);
 
     useEffect(() => {
-        addTile(board);
-        addTile(board);
-        setBoard([...board]);
+        startGame();
         window.addEventListener('keydown', handleKeyDown);
         window.addEventListener('touchstart', handleTouchStart);
         window.addEventListener('touchmove', handleTouchMove);
@@ -26,6 +25,14 @@ const Board = () => {
             window.removeEventListener('touchend', handleTouchEnd);
         };
     }, []);
+
+    const startGame = () => {
+        const newBoard = createBoard();
+        addTile(newBoard);
+        addTile(newBoard);
+        setBoard(newBoard);
+        setGameOver(false);
+    };
 
     let touchStartX = 0;
     let touchStartY = 0;
@@ -73,6 +80,7 @@ const Board = () => {
             recordMove();
             if (!canMove(board)) {
                 setGameOver(true);
+                saveScoreToSupabase(board);
             }
         }
     };
@@ -104,6 +112,7 @@ const Board = () => {
             recordMove();
             if (!canMove(board)) {
                 setGameOver(true);
+                saveScoreToSupabase(board);
             }
         }
     };
@@ -216,6 +225,28 @@ const Board = () => {
         return false;
     };
 
+    const saveScoreToSupabase = async (board) => {
+        const score = calculateScore(board);
+        const { data, error } = await supabase
+            .from('users')
+            .update({ score: score })
+            .eq('wallet', wallet);
+
+        if (error) {
+            console.error('Error saving score:', error);
+        }
+    };
+
+    const calculateScore = (board) => {
+        let score = 0;
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                score += board[i][j];
+            }
+        }
+        return score;
+    };
+
     return (
         <div>
             {gameOver && <div className="game-over">Game Over!</div>}
@@ -226,6 +257,7 @@ const Board = () => {
                     ))
                 ))}
             </div>
+            {gameOver && <button onClick={startGame} className="restart-button">Restart</button>}
         </div>
     );
 };
