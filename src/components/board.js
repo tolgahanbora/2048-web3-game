@@ -1,3 +1,4 @@
+// File: src/components/board.jsx
 import React, { useState, useEffect } from 'react';
 import Tile from './tile';
 import './board.css';
@@ -75,12 +76,13 @@ const Board = ({ wallet }) => {
         }
 
         if (moved) {
-            addTile(board);
-            setBoard([...board]);
+            const newBoard = [...board];
+            addTile(newBoard);
+            setBoard(newBoard);
             recordMove();
-            if (!canMove(board)) {
+            if (!canMove(newBoard)) {
                 setGameOver(true);
-                saveScoreToSupabase(board);
+                saveScoreToSupabase(newBoard);
             }
         }
     };
@@ -107,12 +109,13 @@ const Board = ({ wallet }) => {
         }
 
         if (moved) {
-            addTile(board);
-            setBoard([...board]);
+            const newBoard = [...board];
+            addTile(newBoard);
+            setBoard(newBoard);
             recordMove();
-            if (!canMove(board)) {
+            if (!canMove(newBoard)) {
                 setGameOver(true);
-                saveScoreToSupabase(board);
+                saveScoreToSupabase(newBoard);
             }
         }
     };
