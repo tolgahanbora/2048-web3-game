@@ -1,5 +1,4 @@
-// File: src/components/board.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Tile from './tile';
 import './board.css';
 import { Block, gameBlockchain } from './blockchain';
@@ -15,110 +14,114 @@ const Board = ({ wallet }) => {
 
     useEffect(() => {
         startGame();
+    }, []);
+
+    const startGame = useCallback(() => {
+        const newBoard = createBoard();
+        addTile(newBoard);
+        addTile(newBoard);
+        setBoard(newBoard);
+        setGameOver(false);
+    }, []);
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (gameOver) return;
+
+            let moved = false;
+            switch (e.key) {
+                case 'ArrowUp':
+                    moved = moveUp();
+                    break;
+                case 'ArrowDown':
+                    moved = moveDown();
+                    break;
+                case 'ArrowLeft':
+                    moved = moveLeft();
+                    break;
+                case 'ArrowRight':
+                    moved = moveRight();
+                    break;
+                default:
+                    break;
+            }
+
+            if (moved) {
+                const newBoard = [...board];
+                addTile(newBoard);
+                setBoard(newBoard);
+                recordMove();
+                if (!canMove(newBoard)) {
+                    setGameOver(true);
+                    saveScoreToSupabase(newBoard);
+                }
+            }
+        };
+
+        const handleTouchStart = (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        };
+
+        const handleTouchMove = (e) => {
+            e.preventDefault();
+        };
+
+        const handleTouchEnd = (e) => {
+            if (gameOver) return;
+
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+
+            const absDeltaX = Math.abs(deltaX);
+            const absDeltaY = Math.abs(deltaY);
+
+            let moved = false;
+
+            if (absDeltaX > absDeltaY) {
+                if (deltaX > 0) {
+                    moved = moveRight();
+                } else {
+                    moved = moveLeft();
+                }
+            } else {
+                if (deltaY > 0) {
+                    moved = moveDown();
+                } else {
+                    moved = moveUp();
+                }
+            }
+
+            if (moved) {
+                const newBoard = [...board];
+                addTile(newBoard);
+                setBoard(newBoard);
+                recordMove();
+                if (!canMove(newBoard)) {
+                    setGameOver(true);
+                    saveScoreToSupabase(newBoard);
+                }
+            }
+        };
+
         window.addEventListener('keydown', handleKeyDown);
         window.addEventListener('touchstart', handleTouchStart);
         window.addEventListener('touchmove', handleTouchMove);
         window.addEventListener('touchend', handleTouchEnd);
+
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('touchstart', handleTouchStart);
             window.removeEventListener('touchmove', handleTouchMove);
             window.removeEventListener('touchend', handleTouchEnd);
         };
-    }, []);
-
-    const startGame = () => {
-        const newBoard = createBoard();
-        addTile(newBoard);
-        addTile(newBoard);
-        setBoard(newBoard);
-        setGameOver(false);
-    };
+    }, [board, gameOver, startGame]);
 
     let touchStartX = 0;
     let touchStartY = 0;
-
-    const handleTouchStart = (e) => {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-    };
-
-    const handleTouchMove = (e) => {
-        e.preventDefault();
-    };
-
-    const handleTouchEnd = (e) => {
-        if (gameOver) return;
-
-        const touchEndX = e.changedTouches[0].clientX;
-        const touchEndY = e.changedTouches[0].clientY;
-
-        const deltaX = touchEndX - touchStartX;
-        const deltaY = touchEndY - touchStartY;
-
-        const absDeltaX = Math.abs(deltaX);
-        const absDeltaY = Math.abs(deltaY);
-
-        let moved = false;
-
-        if (absDeltaX > absDeltaY) {
-            if (deltaX > 0) {
-                moved = moveRight();
-            } else {
-                moved = moveLeft();
-            }
-        } else {
-            if (deltaY > 0) {
-                moved = moveDown();
-            } else {
-                moved = moveUp();
-            }
-        }
-
-        if (moved) {
-            const newBoard = [...board];
-            addTile(newBoard);
-            setBoard(newBoard);
-            recordMove();
-            if (!canMove(newBoard)) {
-                setGameOver(true);
-                saveScoreToSupabase(newBoard);
-            }
-        }
-    };
-
-    const handleKeyDown = (e) => {
-        if (gameOver) return;
-
-        let moved = false;
-        switch (e.key) {
-            case 'ArrowUp':
-                moved = moveUp();
-                break;
-            case 'ArrowDown':
-                moved = moveDown();
-                break;
-            case 'ArrowLeft':
-                moved = moveLeft();
-                break;
-            case 'ArrowRight':
-                moved = moveRight();
-                break;
-            default:
-                break;
-        }
-
-        if (moved) {
-            const newBoard = [...board];
-            addTile(newBoard);
-            setBoard(newBoard);
-            recordMove();
-            if (!canMove(newBoard)) {
-                setGameOver(true);
-                saveScoreToSupabase(newBoard);
-            }
-        }
-    };
 
     const addTile = (board) => {
         let emptyTiles = [];

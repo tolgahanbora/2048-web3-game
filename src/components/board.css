@@ -9,6 +9,14 @@
 
 .tile {
     aspect-ratio: 1;
+    background-color: #cdc1b4;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #776e65;
 }
 
 .game-over {
@@ -20,5 +28,21 @@
     transform: translate(-50%, -50%);
     background: rgba(255, 255, 255, 0.7);
     padding: 20px;
-    border-radius:  10px;
+    border-radius: 10px;
+}
+
+.restart-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #8f7a66;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.restart-button:hover {
+    background-color: #9c8370;
 }
