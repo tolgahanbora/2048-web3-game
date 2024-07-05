@@ -1,70 +1,27 @@
-# Getting Started with Create React App
+Game Description
+2048 Puzzle Game - Solana Rewards Edition
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the ultimate 2048 puzzle game experience, where your skills not only bring you glory but also real rewards! Engage in the addictive and challenging 2048 puzzle game and compete for the top spots on our leaderboard. The top 5 players with the highest scores will be rewarded with Solana tokens.
 
-## Available Scripts
+How It Works
+Play the Game: Test your strategic thinking and swiping skills in our 2048 puzzle game. Combine tiles with the same numbers to create higher numbers, aiming to reach the elusive 2048 tile and beyond.
 
-In the project directory, you can run:
+Compete on the Leaderboard: Your scores will automatically be tracked and displayed on our real-time leaderboard. Strive to achieve the highest score and secure a position among the top 5 players.
 
-### `npm start`
+Earn Rewards: The top 5 players at the end of each competition period will earn Solana tokens. These rewards will be distributed based on their leaderboard rankings.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Claim Your Solana: Winners can claim their Solana rewards seamlessly through our integration with Solana Blinks API. Simply click the "Claim Coins" button in the game interface, and your Solana will be transferred to your wallet securely and efficiently.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Key Features
+Addictive Gameplay: Enjoy the classic 2048 puzzle game with smooth controls and an intuitive interface.
+Real-Time Leaderboard: Track your progress and see how you stack up against other players in real-time.
+Solana Rewards: Win Solana tokens by being one of the top 5 players on the leaderboard.
+Easy Claims: Claim your rewards effortlessly through the Solana Blinks API.
+Get Started
+Sign Up: Create an account and link your Solana wallet to start playing and earning rewards.
+Play and Compete: Dive into the game, achieve high scores, and climb the leaderboard.
+Claim Your Rewards: If you're one of the top 5 players, claim your Solana tokens with a simple click.
+Join our community of puzzle enthusiasts and crypto lovers. Start playing the 2048 puzzle game today, compete for the top spot, and earn Solana rewards!
 
-### `npm test`
+Note: Ensure your Solana wallet is correctly linked and up-to-date to receive your rewards without any issues.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
