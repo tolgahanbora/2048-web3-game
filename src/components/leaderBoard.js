@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import supabase from '../utils/supabase';
 import './leaderBoard.css';
 
@@ -6,7 +7,9 @@ const Leaderboard = ({ userWallet }) => {
     const [leaderboard, setLeaderboard] = useState([]);
     const [userScore, setUserScore] = useState(null);
     const [userRank, setUserRank] = useState(null);
+    const [userCoin, setUserCoin] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [claiming, setClaiming] = useState(false);
 
     useEffect(() => {
         fetchLeaderboard();
@@ -25,14 +28,14 @@ const Leaderboard = ({ userWallet }) => {
             // Fetch user's score
             const { data: userData, error: userError } = await supabase
                 .from('users')
-                .select('score')
+                .select('score, coin')
                 .eq('wallet', userWallet)
                 .single();
 
             if (userError) throw userError;
 
             setUserScore(userData?.score || 0); // Default to 0 if user score is not found
-
+            setUserCoin(userData?.coin || 0);
             // Determine user's rank
             const userRank = allUsersData.findIndex(user => user.wallet === userWallet) + 1;
             setUserRank(userRank);
@@ -45,6 +48,35 @@ const Leaderboard = ({ userWallet }) => {
         } catch (error) {
             console.error('Error fetching leaderboard:', error);
             setLoading(false);
+        }
+    };
+
+    const handleClaim = async () => {
+        if (userCoin <= 0 || claiming) return;
+        setClaiming(true);
+
+        try {
+            const response = await axios.post('/sendTransaction', {
+                toWallet: userWallet,
+                amountInLamports: userCoin * 1 // Assuming 1 coin = 1 SOL
+            });
+
+            if (response.status === 200) {
+                console.log('Transaction successful:', response.data);
+                // Update user's coins to 0 after successful claim
+                await supabase
+                    .from('users')
+                    .update({ coins: 0 })
+                    .eq('wallet', userWallet);
+
+                setUserCoin(0);
+            } else {
+                console.error('Error sending transaction:', response.data);
+            }
+        } catch (error) {
+            console.error('Error sending transaction:', error);
+        } finally {
+            setClaiming(false);
         }
     };
 
@@ -78,7 +110,13 @@ const Leaderboard = ({ userWallet }) => {
                 <h3>Your Stats</h3>
                 <p>Your Rank: {userRank}</p>
                 <p>Your Score: {userScore}</p>
-                
+                <p>Your Coins: {userCoin}</p> {/* Display user coins */}
+                <button 
+                    onClick={handleClaim} 
+                    disabled={userCoin <= 0 || claiming}
+                >
+                    {claiming ? 'Claiming...' : 'Claim Coins'}
+                </button>
             </div>
         </div>
     );

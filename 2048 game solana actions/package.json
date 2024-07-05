@@ -2,11 +2,12 @@
   "name": "solana-actions-example",
   "version": "1.0.0",
   "main": "server.ts",
-  "scripts": {
-    "start": "node server.js"
+"scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/server.js"
   },
   "dependencies": {
-    "@solana/actions": "^0.0.1",
+    "@solana/actions": "^1.1.1",
     "@solana/web3.js": "^1.30.0",
     "body-parser": "^1.19.0",
     "dotenv": "^10.0.0",
