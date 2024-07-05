@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import supabase from '../utils/supabase';
 import './leaderBoard.css';
+import Confetti from 'react-confetti';
 
 const Leaderboard = ({ userWallet }) => {
     const [leaderboard, setLeaderboard] = useState([]);
@@ -10,6 +11,7 @@ const Leaderboard = ({ userWallet }) => {
     const [userCoin, setUserCoin] = useState(0);
     const [loading, setLoading] = useState(true);
     const [claiming, setClaiming] = useState(false);
+    const [showConfetti, setShowConfetti] = useState(false);
 
     useEffect(() => {
         fetchLeaderboard();
@@ -56,17 +58,19 @@ const Leaderboard = ({ userWallet }) => {
         setClaiming(true);
 
         try {
-            const response = await axios.post('/sendTransaction', {
+            const response = await axios.post('https://two048-web3-game.onrender.com/sendTransaction', {
                 toWallet: userWallet,
-                amountInLamports: userCoin * 1 // Assuming 1 coin = 1 SOL
+                amountInLamports: userCoin * 1000000000
             });
 
             if (response.status === 200) {
-                console.log('Transaction successful:', response.data);
+                setShowConfetti(true);
+                setTimeout(() => setShowConfetti(false), 5000);
+             
                 // Update user's coins to 0 after successful claim
                 await supabase
                     .from('users')
-                    .update({ coins: 0 })
+                    .update({ coin: 0 })
                     .eq('wallet', userWallet);
 
                 setUserCoin(0);
@@ -86,6 +90,7 @@ const Leaderboard = ({ userWallet }) => {
 
     return (
         <div className="leaderboard">
+             {showConfetti && <Confetti />}
             <h2>Leaderboard</h2>
             <table>
                 <thead>
@@ -112,6 +117,7 @@ const Leaderboard = ({ userWallet }) => {
                 <p>Your Score: {userScore}</p>
                 <p>Your Coins: {userCoin}</p> {/* Display user coins */}
                 <button 
+                  className="claim-button"
                     onClick={handleClaim} 
                     disabled={userCoin <= 0 || claiming}
                 >
