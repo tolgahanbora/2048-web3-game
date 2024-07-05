@@ -5,30 +5,49 @@ import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-r
 import '@solana/wallet-adapter-react-ui/styles.css';
 
 const WalletConnect = ({ onWalletConnected }) => {
-    const { wallet, connect, publicKey } = useWallet();
-    const { connection } = useConnection();
+    const { publicKey } = useWallet();
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (publicKey) {
             const walletAddress = publicKey.toString();
-            saveWalletToSupabase(walletAddress);
+            checkAndSaveWallet(walletAddress);
         }
     }, [publicKey]);
 
-    const saveWalletToSupabase = async (walletAddress) => {
+    const checkAndSaveWallet = async (walletAddress) => {
         setLoading(true);
-        const { data, error } = await supabase
-            .from('users')
-            .upsert({ wallet: walletAddress })
-            .eq('wallet', walletAddress);
+        
+        try {
+            // Check if the wallet address already exists
+            const { data: existingUser, error: fetchError } = await supabase
+                .from('users')
+                .select('wallet')
+                .eq('wallet', walletAddress)
+                .single();
 
-        setLoading(false);
+            if (fetchError && fetchError.code !== 'PGRST116') {
+                // Handle the error only if it's not a 'No Rows Found' error
+                throw fetchError;
+            }
 
-        if (error) {
-            console.error('Error saving wallet:', error);
-        } else {
+            if (!existingUser) {
+                // If the wallet address does not exist, save it
+                const { error: insertError } = await supabase
+                    .from('users')
+                    .insert({ wallet: walletAddress });
+
+                if (insertError) {
+                    throw insertError;
+                }
+            }
+
+            // Call the callback whether the wallet was newly inserted or already existed
             onWalletConnected(walletAddress);
+        } catch (error) {
+            console.error('Error handling wallet:', error);
+        } finally {
+            setLoading(false);
         }
     };
 

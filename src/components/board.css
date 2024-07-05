@@ -1,3 +1,5 @@
+/* board.css */
+
 #game-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -31,9 +33,9 @@
     border-radius: 10px;
 }
 
-.restart-button {
+.restart-button, .disconnect-button {
     display: block;
-    margin: 20px auto;
+    margin: 10px auto;
     padding: 10px 20px;
     font-size: 18px;
     background-color: #8f7a66;
@@ -41,8 +43,20 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 200px; /* Ensure both buttons are the same width */
 }
 
-.restart-button:hover {
+.restart-button:hover, .disconnect-button:hover {
     background-color: #9c8370;
+}
+
+.disconnect-button {
+    background-color: red;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
 }

@@ -8,9 +8,10 @@ const createBoard = () => {
     return Array(4).fill(null).map(() => Array(4).fill(0));
 };
 
-const Board = ({ wallet }) => {
+const Board = ({ wallet, onWalletDisconnected }) => {
     const [board, setBoard] = useState(createBoard());
     const [gameOver, setGameOver] = useState(false);
+    const [score, setScore] = useState(0);
 
     useEffect(() => {
         startGame();
@@ -21,6 +22,7 @@ const Board = ({ wallet }) => {
         addTile(newBoard);
         addTile(newBoard);
         setBoard(newBoard);
+        setScore(0);
         setGameOver(false);
     }, []);
 
@@ -155,6 +157,7 @@ const Board = ({ wallet }) => {
             if (newRow[i] === newRow[i + 1]) {
                 newRow[i] *= 2;
                 newRow[i + 1] = 0;
+                setScore(prevScore => prevScore + newRow[i]);
             }
         }
         newRow = newRow.filter(val => val !== 0);
@@ -256,6 +259,7 @@ const Board = ({ wallet }) => {
     return (
         <div>
             {gameOver && <div className="game-over">Game Over!</div>}
+            <div className="score">Score: {score}</div>
             <div id="game-container">
                 {board.map((row, rowIndex) => (
                     row.map((tileValue, colIndex) => (
@@ -263,7 +267,14 @@ const Board = ({ wallet }) => {
                     ))
                 ))}
             </div>
-            {gameOver && <button onClick={startGame} className="restart-button">Restart</button>}
+          
+                <div className="buttons-container">
+                {gameOver && (
+                    <button onClick={startGame} className="restart-button">Restart</button>
+                )}
+                    <button onClick={onWalletDisconnected} className="disconnect-button">Disconnect Wallet</button>
+                </div>
+          
         </div>
     );
 };

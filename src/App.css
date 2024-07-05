@@ -1,34 +1,12 @@
-#game-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  width: 90vw;
-  max-width: 400px;
-  margin: 0 auto;
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
 }
 
-.tile {
-  aspect-ratio: 1;
-  background-color: #cdc1b4;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  font-weight: bold;
-  color: #776e65;
-}
-
-.game-over {
-  font-size: 48px;
-  color: red;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.7);
-  padding: 20px;
-  border-radius: 10px;
+@media (max-width: 600px) {
+  h1 {
+      font-size: 24px;
+  }
 }
 
 .restart-button {
@@ -36,13 +14,20 @@
   margin: 20px auto;
   padding: 10px 20px;
   font-size: 18px;
+  border: none;
   background-color: #8f7a66;
   color: white;
-  border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .restart-button:hover {
-  background-color: #9c8370;
+  background-color: #9c8b75;
+}
+
+.game-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-wrap: wrap;
 }

@@ -1,0 +1,8 @@
+{
+    "rules": [
+      {
+        "pathPattern": "/game/2048/**",
+        "apiPath": "/api/actions/2048/**"
+      }
+    ]
+  }
